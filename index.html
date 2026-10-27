@@ -80,6 +80,7 @@ button:focus-visible,label:focus-visible,input:focus-visible{outline:2px solid v
 .arch iframe{left:50%!important;right:auto!important;transform:translateX(-50%);width:calc(min(50dvh,430px)*.5625)!important}
 .arch video{object-fit:contain!important}.mu{position:absolute;right:14px;bottom:50px;width:44px;height:44px;border-radius:50%;border:1px solid var(--au);background:rgba(24,4,8,.7);color:var(--au);font-size:18px;cursor:pointer;z-index:4}
 .vfb{position:absolute;left:50%;top:0;height:100%;transform:translateX(-50%)}
+.fab,.eb,.tb,.ec{display:none!important}
 </style></head><body>
 <svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="boteh" viewBox="0 0 100 100"><path d="M48 94C16 94 8 58 34 32C42 24 46 14 58 8C60 22 74 26 80 44C88 68 74 94 48 94Z"/><path d="M48 80C32 80 28 60 42 48C46 56 56 54 60 64C62 74 56 80 48 80Z"/><circle cx="48" cy="66" r="2"/><path d="M30 60q4-14 14-18M26 74q-2-8 2-14" stroke-dasharray="1 4"/></symbol>
@@ -99,7 +100,7 @@ button:focus-visible,label:focus-visible,input:focus-visible{outline:2px solid v
 <div class="eb"><button class="b b1" id="sv">Save</button><button class="b b2" id="dn">Done</button></div>
 <div class="lang" id="lang"><button data-l="en" class="a">EN</button><button data-l="hi">हिं</button><button data-l="kn">ಕನ್ನಡ</button></div>
 <nav class="dots" id="dots" aria-label="Sections"></nav>
-<button class="fab" id="fab" aria-label="Edit">✎</button><div class="toast" id="toast"></div><div class="tb" id="tb"><button data-a="u">↑</button><button data-a="d">↓</button><button data-a="l">←</button><button data-a="r">→</button><button data-a="f-">A−</button><button data-a="f+">A+</button><button data-a="w-">W−</button><button data-a="w+">W+</button><button data-a="p">Parent</button><button data-a="z">Reset</button><button data-a="x">✕</button></div>
+<div class="toast" id="toast"></div><div class="tb" id="tb"><button data-a="u">↑</button><button data-a="d">↓</button><button data-a="l">←</button><button data-a="r">→</button><button data-a="f-">A−</button><button data-a="f+">A+</button><button data-a="w-">W−</button><button data-a="w+">W+</button><button data-a="p">Parent</button><button data-a="z">Reset</button><button data-a="x">✕</button></div>
 <main id="main">
 <section class="s"><div class="rv"><img class="lgi em" alt="Kahani Karigar Ki logo"><h1><span data-k="brand1"></span><br><span data-k="brand2"></span></h1><p class="hd" style="font-size:18px;color:var(--cr)" data-k="tag"></p></div><p class="pers" data-k="pers"></p><div class="sw" data-k="swipe"></div></section>
 <section class="s"><div class="lg"><img class="lgi" alt=""><span><span data-k="brand1"></span><br><span data-k="brand2"></span></span></div><div class="rv" style="gap:10px"><p class="lbl" data-k="l2"></p>
@@ -148,7 +149,7 @@ const VID_POSTER="data:image/jpeg;base64,/9j//gAQTGF2YzYwLjMxLjEwMgD/2wBDAAgICAk
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const id=new URLSearchParams(location.search).get('id')||location.hash.slice(1)||'arha',K=KARIGARS[id]||KARIGARS.arha,T={...UI,...K.t};
 let LY={},cur=null,lang='en',ed=false,ov={},P={...K.price},ph={},vs=K.video,thanked=false;
-try{const d=JSON.parse(localStorage.getItem('kk_'+id)||'null');if(d){ov=d.ov||{};ph=d.ph||{};LY=d.LY||{};if(d.P&&Object.values(d.P).every(Array.isArray))P=d.P;vs=d.vs||vs}}catch(e){}
+try{const d=null;if(d){ov=d.ov||{};ph=d.ph||{};LY=d.LY||{};if(d.P&&Object.values(d.P).every(Array.isArray))P=d.P;vs=d.vs||vs}}catch(e){}
 const g=k=>{const o=ov[lang]&&ov[lang][k];if(o!=null)return o;const t=T[k];return t?(t[lang]??t.en):k};
 /* backgrounds */
 const cols=['#3A0810','#6E0F1C','#123524','#6E0F1C','#123524','#3A0810'],glow=['#5a0f1b','#8a1a2a','#1d4a33','#8a1a2a','#1d4a33','#5a0f1b'];
@@ -174,8 +175,8 @@ function render(){document.documentElement.lang=lang;$$('[data-k]').forEach(e=>{
 $$('#lang button').forEach(b=>b.onclick=()=>{lang=b.dataset.l;render()});
 document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.k;if(ed&&k)(ov[lang]=ov[lang]||{})[k]=e.target.textContent});
 const toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',1600)};
-function mode(on){ed=on;if(!on)sel(null);$('#app').classList.toggle('ed',on);render();pin()}
-$('#fab').onclick=()=>mode(true);$('#dn').onclick=()=>mode(false);
+function mode(on){ed=false;sel(null);$('#app').classList.toggle('ed',on);render();pin()}
+$('#dn').onclick=()=>mode(false);
 $('#sv').onclick=()=>{try{localStorage.setItem('kk_'+id,JSON.stringify({ov,P,ph,vs,LY}));toast('Saved')}catch(e){toast('Could not save (photo too large?)')}};
 /* photos */
 const ALT={pp:'Portrait of Arha at work',fp:'A hand-embroidered blouse made by the karigar',cp:'Arha’s hand couching gold zardozi thread'};
